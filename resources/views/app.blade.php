@@ -12,9 +12,30 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    <?php
+    /**
+     * Call to the routes config to make them available 
+     * routes/web.php
+     */
+    ?>
     @routes
+    <?php
+    /**
+     * When we change something in the project app the project is reloaded
+     */
+    ?>
     @viteReactRefresh
+    <?php
+    /**
+     * Load react app.tsx and all pages related
+     */
+    ?>
     @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
+    <?php
+    /**
+     * Generate all the meta
+     */
+    ?>
     @inertiaHead
 </head>
 
