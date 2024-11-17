@@ -1,10 +1,11 @@
+import BirthdateSelect from '@/Components/BirthdateSelect';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -12,13 +13,33 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        birthdate_select: {
+            day: '',
+            month: '',
+            year: '',
+        },
     });
+
+    const [birthdateError, setBirthdateError] = useState('');
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
+        // Validate birthday
+        const { day, month, year } = data.birthdate_select;
+        const isValidBirthday = day && month && year; // Check if all parts of the date are selected
+
+        // Check if its filled birthday selects
+        if (!isValidBirthday) {
+            setBirthdateError('Please select your birthday.');
+            return;
+        }
+
+        setBirthdateError(''); // Clear any previous errors
+
         post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+            onFinish: () =>
+                reset('password', 'password_confirmation', 'birthdate_select'),
         });
     };
 
@@ -103,6 +124,25 @@ export default function Register() {
                     />
                 </div>
 
+                <div className="mt-4">
+                    <InputLabel htmlFor="birthdate_select" value="Birthday" />
+                    <BirthdateSelect
+                        id="birthdate_select"
+                        name="birthdate_select"
+                        className="mt-1 block w-full"
+                        onChange={(date) => {
+                            console.log('Selected Birthday:', date); // Optional: Log the selected date
+                            setData('birthdate_select', date); // Update the form data with the selected date
+                            setBirthdateError(''); // Clear error if date is selected
+                        }}
+                        required
+                    />
+                    <InputError
+                        message={errors.birthdate_select || birthdateError}
+                        className="mt-2"
+                    />
+                    {/* Display error if any */}
+                </div>
                 <div className="mt-4 flex items-center justify-end">
                     <Link
                         href={route('login')}

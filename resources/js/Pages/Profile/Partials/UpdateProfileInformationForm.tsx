@@ -21,6 +21,7 @@ export default function UpdateProfileInformation({
         useForm({
             name: user.name,
             email: user.email,
+            birth_date: user.birth_date,
         });
 
     const submit: FormEventHandler = (e) => {
@@ -72,6 +73,21 @@ export default function UpdateProfileInformation({
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="birthdate" value="Birthdate" />
+
+                    <TextInput
+                        id="birthdate"
+                        type="text"
+                        className="mt-1 block w-full"
+                        value={data.birth_date}
+                        // onChange={(e) => setData('email', e.target.value)}
+                        // required
+                    />
+
+                    <InputError className="mt-2" message={errors.birth_date} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (

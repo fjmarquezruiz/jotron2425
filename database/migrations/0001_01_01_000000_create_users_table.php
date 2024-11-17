@@ -17,6 +17,15 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            /**
+             * Update migration to our necesities
+             */
+            $table->string('surname', 100)->nullable(); // Added Apellido
+            $table->date('birth_date')->nullable(); // Added FechaNacimiento
+            $table->string('id_card', 20)->unique()->nullable(); // Added IDCard
+            $table->string('phone', 20)->nullable(); // Added Telefono
+            $table->boolean('account_state')->default(true); // Added EstadoCuenta
+            $table->boolean('age_verify')->default(false); // Added EdadVerificada
             $table->rememberToken();
             $table->timestamps();
         });
