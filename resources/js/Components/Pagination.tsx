@@ -24,7 +24,6 @@ export default function Pagination({
                 // Construir la URL con los parámetros de consulta
                 const urlWithParams = new URL(link.url, window.location.origin);
                 Object.keys(queryParams).forEach((key) => {
-                    console.log(key, '-> ', queryParams[key]);
                     urlWithParams.searchParams.append(key, queryParams[key]);
                 });
 
