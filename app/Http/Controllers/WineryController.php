@@ -17,6 +17,9 @@ class WineryController extends Controller
     {
         $query = Winery::query();
 
+        $sortField = request("sort_field", 'created_at');
+        $sortDirection = request("sort_direction", 'desc');
+
         if (request('name')) {
             $query->where('name', 'like', '%' . request('name') . '%');
         }
@@ -38,7 +41,7 @@ class WineryController extends Controller
         }
 
         // $wineries = $query->paginate(10)->onEachSide(1);
-        $wineries = $query->paginate(5);
+        $wineries = $query->orderBy($sortField, $sortDirection)->paginate(5);
 
         // return Inertia::render("Winery/Index");
         return inertia("Winery/Index", [
