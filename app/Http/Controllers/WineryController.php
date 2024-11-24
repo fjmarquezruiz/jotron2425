@@ -17,12 +17,33 @@ class WineryController extends Controller
     {
         $query = Winery::query();
 
+        if (request('name')) {
+            $query->where('name', 'like', '%' . request('name') . '%');
+        }
+
+        if (request('province')) {
+            $query->where('province', 'like', '%' . request('province') . '%');
+        }
+
+        // if (request('block')) {
+        //     $query->where('block',  request('block'));
+        // }
+
+        // Verificar si el valor de 'block' es un booleano
+        if (request()->has('block')) {
+            $blockValue = filter_var(request('block'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if ($blockValue !== null) {
+                $query->where('block', $blockValue);
+            }
+        }
+
         // $wineries = $query->paginate(10)->onEachSide(1);
         $wineries = $query->paginate(5);
 
         // return Inertia::render("Winery/Index");
         return inertia("Winery/Index", [
             "wineries" => WineryResource::collection($wineries),
+            "queryParams" => request()->query() ?: null,
         ]);
     }
 
