@@ -39,6 +39,12 @@ export default function Authenticated({
                                     Winery
                                 </NavLink>
                                 <NavLink
+                                    href={route('wine.index')}
+                                    active={route().current('wine.index')}
+                                >
+                                    Wines
+                                </NavLink>
+                                <NavLink
                                     href={route('user.index')}
                                     active={route().current('user.index')}
                                 >

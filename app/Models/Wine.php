@@ -9,4 +9,9 @@ class Wine extends Model
 {
     /** @use HasFactory<\Database\Factories\WineFactory> */
     use HasFactory;
+
+    public function assignedWinery()
+    {
+        return $this->belongsTo(Winery::class, 'winery_id');
+    }
 }

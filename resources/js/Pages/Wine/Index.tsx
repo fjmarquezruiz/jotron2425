@@ -1,5 +1,4 @@
 import Pagination from '@/Components/Pagination';
-import SelectInput from '@/Components/SelectInput';
 import TableHeading from '@/Components/TableHeading';
 import TextInput from '@/Components/TextInput';
 import { BLOCK_STATUS_CLASS_MAP, BLOCK_STATUS_TEXT_MAP } from '@/constants';
@@ -16,10 +15,21 @@ interface Winery {
     created_at: string;
 }
 
+interface Wine {
+    id: number;
+    name: string;
+    image: string;
+    city: string;
+    province: string;
+    block: boolean;
+    created_at: string;
+    winery: Winery;
+}
+
 // Define IndexProps to satisfy Record<string, unknown>
 interface IndexProps extends Record<string, unknown> {
-    wineries: {
-        data: Winery[];
+    wines: {
+        data: Wine[];
         meta: PaginationMeta;
     };
     queryParams?: Record<string, string>; // Optional queryParams with default as an empty object
@@ -39,7 +49,7 @@ interface PaginationMeta {
 }
 
 export default function Index({
-    wineries,
+    wines,
     queryParams = {},
 }: PageProps<IndexProps>) {
     queryParams = queryParams || {};
@@ -66,7 +76,7 @@ export default function Index({
             delete queryParams[name];
         }
 
-        router.get(route('winery.index'), queryParams);
+        router.get(route('wine.index'), queryParams);
     };
 
     const handleKeyDown = (
@@ -88,24 +98,24 @@ export default function Index({
             queryParams.sort_direction = 'asc';
         }
 
-        router.get(route('winery.index'), queryParams);
+        router.get(route('wine.index'), queryParams);
     };
 
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Winery
+                    Wine
                 </h2>
             }
         >
-            <Head title="winery" />
+            <Head title="wine" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            You're in winery
+                            You're in wine
                             <div className="overflow-auto">
                                 <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
                                     <thead className="border-b-2 border-gray-500 bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -123,6 +133,12 @@ export default function Index({
                                                 id
                                             </TableHeading>
                                             <TableHeading
+                                                name="image"
+                                                sortable={false}
+                                            >
+                                                image
+                                            </TableHeading>
+                                            <TableHeading
                                                 name="name"
                                                 sort_field={
                                                     queryParams.sort_field
@@ -135,7 +151,7 @@ export default function Index({
                                                 name
                                             </TableHeading>
                                             <TableHeading
-                                                name="city"
+                                                name="winery_id"
                                                 sort_field={
                                                     queryParams.sort_field
                                                 }
@@ -144,43 +160,7 @@ export default function Index({
                                                 }
                                                 sortChanged={sortChanged}
                                             >
-                                                city
-                                            </TableHeading>
-                                            <TableHeading
-                                                name="province"
-                                                sort_field={
-                                                    queryParams.sort_field
-                                                }
-                                                sort_direction={
-                                                    queryParams.sort_direction
-                                                }
-                                                sortChanged={sortChanged}
-                                            >
-                                                province
-                                            </TableHeading>
-                                            <TableHeading
-                                                name="block"
-                                                sort_field={
-                                                    queryParams.sort_field
-                                                }
-                                                sort_direction={
-                                                    queryParams.sort_direction
-                                                }
-                                                sortChanged={sortChanged}
-                                            >
-                                                province
-                                            </TableHeading>
-                                            <TableHeading
-                                                name="created_at"
-                                                sort_field={
-                                                    queryParams.sort_field
-                                                }
-                                                sort_direction={
-                                                    queryParams.sort_direction
-                                                }
-                                                sortChanged={sortChanged}
-                                            >
-                                                created at
+                                                winery
                                             </TableHeading>
 
                                             <th className="px-3 py-3 text-right">
@@ -191,10 +171,11 @@ export default function Index({
                                     <thead className="border-b-2 border-gray-500 bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                                         <tr className="text-nowrap">
                                             <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3">
                                                 <TextInput
                                                     className="w-full"
-                                                    placeholder="Winery name"
+                                                    placeholder="Wine name"
                                                     defaultValue={
                                                         queryParams.name
                                                     }
@@ -210,111 +191,44 @@ export default function Index({
                                                 />
                                             </th>
                                             <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3">
-                                                <SelectInput
-                                                    className="w-full"
-                                                    defaultValue={
-                                                        queryParams.province
-                                                    }
-                                                    onChange={(e) =>
-                                                        searchFieldChange(
-                                                            'province',
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                >
-                                                    <option value="">
-                                                        Select a province
-                                                    </option>
-                                                    <option value="Almeria">
-                                                        Almeria
-                                                    </option>
-                                                    <option value="Cádiz">
-                                                        Cádiz
-                                                    </option>
-                                                    <option value="Córdoba">
-                                                        Córdoba
-                                                    </option>
-                                                    <option value="Granada">
-                                                        Granada
-                                                    </option>
-                                                    <option value="Huelva">
-                                                        Huelva
-                                                    </option>
-                                                    <option value="Jaén">
-                                                        Jaén
-                                                    </option>
-                                                    <option value="Málaga">
-                                                        Málaga
-                                                    </option>
-                                                    <option value="Sevilla">
-                                                        Sevilla
-                                                    </option>
-                                                </SelectInput>
-                                            </th>
-                                            <th className="px-3 py-3">
-                                                <SelectInput
-                                                    className="w-full"
-                                                    defaultValue={
-                                                        queryParams.block
-                                                    }
-                                                    onChange={(e) =>
-                                                        searchFieldChange(
-                                                            'block',
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                >
-                                                    <option value="">
-                                                        Select a status
-                                                    </option>
-                                                    <option value="0">
-                                                        Active
-                                                    </option>
-                                                    <option value="1">
-                                                        Blocked
-                                                    </option>
-                                                </SelectInput>
-                                            </th>
-                                            <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3 text-right"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {wineries.data.map((winery) => (
+                                        {wines.data.map((wine) => (
                                             <tr
-                                                key={winery.id}
+                                                key={wine.id}
                                                 className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
                                             >
                                                 <th className="px-3 py-2">
-                                                    {winery.id}
+                                                    {wine.id}
                                                 </th>
                                                 <td className="px-3 py-2">
-                                                    {winery.name}
+                                                    <picture>
+                                                        <source
+                                                            src={wine.image}
+                                                            type="image/png"
+                                                        />
+                                                        <img
+                                                            src={wine.image}
+                                                            alt={wine.name}
+                                                            width="100"
+                                                            loading="lazy"
+                                                            className="aspect-video w-28"
+                                                        />
+                                                    </picture>
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {winery.city}
+                                                    {wine.name}
                                                 </td>
                                                 <td className="px-3 py-2">
-                                                    {winery.province}
-                                                </td>
-                                                <td className="px-3 py-2">
-                                                    <span
-                                                        className={`rounded px-2 py-1 text-white ${getStatusClass(winery.block)}`}
-                                                    >
-                                                        {getStatusText(
-                                                            winery.block,
-                                                        )}
-                                                    </span>
-                                                </td>
-                                                <td className="text-nowrap px-3 py-2">
-                                                    {winery.created_at}
+                                                    {wine.winery.name}
                                                 </td>
                                                 <td className="px-3 py-2 text-right">
                                                     <Link
                                                         href={route(
-                                                            'winery.edit',
-                                                            winery.id,
+                                                            'wine.edit',
+                                                            wine.id,
                                                         )}
                                                         className="mx-1 font-medium text-blue-600 hover:underline dark:text-blue-500"
                                                     >
@@ -322,8 +236,8 @@ export default function Index({
                                                     </Link>
                                                     <Link
                                                         href={route(
-                                                            'winery.destroy',
-                                                            winery.id,
+                                                            'wine.destroy',
+                                                            wine.id,
                                                         )}
                                                         className="mx-1 font-medium text-red-600 hover:underline dark:text-red-500"
                                                     >
@@ -336,10 +250,10 @@ export default function Index({
                                 </table>
                             </div>
                             <Pagination
-                                links={wineries.meta.links}
+                                links={wines.meta.links}
                                 queryParams={filteredQueryParams}
                             />
-                            <pre>{JSON.stringify(wineries, undefined, 2)}</pre>
+                            <pre>{JSON.stringify(wines, undefined, 2)}</pre>
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WineController;
 use App\Http\Controllers\WineryController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Our controllers routes
     Route::resource('winery', WineryController::class);
+    Route::resource('wine', WineController::class);
     Route::resource('user', UserController::class);
 });
 
