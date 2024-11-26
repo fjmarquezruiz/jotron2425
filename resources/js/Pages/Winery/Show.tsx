@@ -109,6 +109,7 @@ export default function Show({
                                 <WinesTable
                                     wines={wines}
                                     queryParams={queryParams}
+                                    hideWineryColumn={true}
                                 />
                             ) : (
                                 'No data available'

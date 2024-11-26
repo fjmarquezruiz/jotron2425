@@ -19,7 +19,7 @@ class WineryController extends Controller
         $query = Winery::query();
 
         $sortField = request("sort_field", 'created_at');
-        $sortDirection = request("sort_direction", 'desc');
+        $sortDirection = request("sort_direction", 'asc');
 
         if (request('name')) {
             $query->where('name', 'like', '%' . request('name') . '%');

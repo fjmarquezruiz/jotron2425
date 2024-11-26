@@ -25,15 +25,6 @@ interface Wine {
     winery: Winery;
 }
 
-// Define WinesTableProps to satisfy Record<string, unknown>
-interface WinesTableProps extends Record<string, unknown> {
-    wines: {
-        data: Wine[];
-        meta: PaginationMeta;
-    };
-    queryParams?: Record<string, string>; // Optional queryParams with default as an empty object
-}
-
 interface Links {
     url: string;
     label: string;
@@ -47,9 +38,20 @@ interface PaginationMeta {
     links: Links[];
 }
 
+// Define WinesTableProps to satisfy Record<string, unknown>
+interface WinesTableProps extends Record<string, unknown> {
+    wines: {
+        data: Wine[];
+        meta: PaginationMeta;
+    };
+    queryParams?: Record<string, string>; // Optional queryParams with default as an empty object
+    hideWineryColumn?: boolean;
+}
+
 export default function WinesTable({
     wines,
     queryParams = {},
+    hideWineryColumn = false,
 }: WinesTableProps) {
     queryParams = queryParams || {};
 
@@ -125,21 +127,23 @@ export default function WinesTable({
                             >
                                 name
                             </TableHeading>
-                            <TableHeading
-                                name="winery_id"
-                                sort_field={queryParams.sort_field}
-                                sort_direction={queryParams.sort_direction}
-                                sortChanged={sortChanged}
-                            >
-                                winery
-                            </TableHeading>
+                            {!hideWineryColumn && (
+                                <TableHeading
+                                    name="winery_id"
+                                    sort_field={queryParams.sort_field}
+                                    sort_direction={queryParams.sort_direction}
+                                    sortChanged={sortChanged}
+                                >
+                                    winery
+                                </TableHeading>
+                            )}
                             <TableHeading
                                 name="block"
                                 sort_field={queryParams.sort_field}
                                 sort_direction={queryParams.sort_direction}
                                 sortChanged={sortChanged}
                             >
-                                province
+                                blocked
                             </TableHeading>
 
                             <th className="px-3 py-3 text-right">actions</th>
@@ -163,7 +167,9 @@ export default function WinesTable({
                                     onKeyDown={(e) => handleKeyDown('name', e)}
                                 />
                             </th>
-                            <th className="px-3 py-3"></th>
+                            {!hideWineryColumn && (
+                                <th className="px-3 py-3"></th>
+                            )}
                             <th className="px-3 py-3">
                                 <SelectInput
                                     className="w-full"
@@ -206,9 +212,11 @@ export default function WinesTable({
                                     </picture>
                                 </td>
                                 <td className="px-3 py-2">{wine.name}</td>
-                                <td className="px-3 py-2">
-                                    {wine.winery.name}
-                                </td>
+                                {!hideWineryColumn && (
+                                    <td className="px-3 py-2">
+                                        {wine.winery.name}
+                                    </td>
+                                )}
                                 <td className="px-3 py-2">
                                     <span
                                         className={`rounded px-2 py-1 text-white ${getStatusClass(wine.block)}`}
