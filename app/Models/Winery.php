@@ -9,4 +9,9 @@ class Winery extends Model
 {
     /** @use HasFactory<\Database\Factories\WineryFactory> */
     use HasFactory;
+
+    public function wines()
+    {
+        return $this->hasMany(Wine::class);
+    }
 }

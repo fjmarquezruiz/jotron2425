@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWineryRequest;
 use App\Http\Requests\UpdateWineryRequest;
+use App\Http\Resources\WineResource;
 use App\Http\Resources\WineryResource;
 use App\Models\Winery;
 use Inertia\Inertia;
@@ -72,6 +73,22 @@ class WineryController extends Controller
     public function show(Winery $winery)
     {
         //
+        $query = $winery->wines();
+
+        $sortField = request("sort_field", 'created_at');
+        $sortDirection = request("sort_direction", 'desc');
+
+        if (request('name')) {
+            $query->where('name', 'like', '%' . request('name') . '%');
+        }
+
+        $wines = $query->orderBy($sortField, $sortDirection)->paginate(10);
+
+        return inertia('Winery/Show', [
+            "winery" => new WineryResource($winery),
+            "wines" => WineResource::collection($wines),
+            "queryParams" => request()->query() ?: null,
+        ]);
     }
 
     /**

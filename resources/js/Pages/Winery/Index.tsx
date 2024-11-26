@@ -289,8 +289,15 @@ export default function Index({
                                                 <th className="px-3 py-2">
                                                     {winery.id}
                                                 </th>
-                                                <td className="px-3 py-2">
-                                                    {winery.name}
+                                                <td className="cursor-pointer px-3 py-2 text-gray-100 hover:underline">
+                                                    <Link
+                                                        href={route(
+                                                            'winery.show',
+                                                            winery.id,
+                                                        )}
+                                                    >
+                                                        {winery.name}
+                                                    </Link>
                                                 </td>
                                                 <td className="px-3 py-2">
                                                     {winery.city}
