@@ -2,7 +2,11 @@ import Pagination from '@/Components/Pagination';
 import SelectInput from '@/Components/SelectInput';
 import TableHeading from '@/Components/TableHeading';
 import TextInput from '@/Components/TextInput';
-import { BLOCK_STATUS_CLASS_MAP, BLOCK_STATUS_TEXT_MAP } from '@/constants';
+import {
+    ANDALUSIA_PROVINCES,
+    BLOCK_STATUS_CLASS_MAP,
+    BLOCK_STATUS_TEXT_MAP,
+} from '@/constants';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
@@ -14,15 +18,6 @@ interface Winery {
     province: string;
     block: boolean;
     created_at: string;
-}
-
-// Define IndexProps to satisfy Record<string, unknown>
-interface IndexProps extends Record<string, unknown> {
-    wineries: {
-        data: Winery[];
-        meta: PaginationMeta;
-    };
-    queryParams?: Record<string, string>; // Optional queryParams with default as an empty object
 }
 
 interface Links {
@@ -38,9 +33,20 @@ interface PaginationMeta {
     links: Links[];
 }
 
+// Define IndexProps to satisfy Record<string, unknown>
+interface IndexProps extends Record<string, unknown> {
+    wineries: {
+        data: Winery[];
+        meta: PaginationMeta;
+    };
+    queryParams?: Record<string, string>; // Optional queryParams with default as an empty object
+    success?: string;
+}
+
 export default function Index({
     wineries,
     queryParams = {},
+    success,
 }: PageProps<IndexProps>) {
     queryParams = queryParams || {};
 
@@ -94,15 +100,28 @@ export default function Index({
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Winery
-                </h2>
+                <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                        Winery
+                    </h2>
+                    <Link
+                        className="rounded bg-emerald-500 px-3 py-1 text-white shadow transition-all hover:bg-emerald-600"
+                        href={route('winery.create')}
+                    >
+                        Add new
+                    </Link>
+                </div>
             }
         >
             <Head title="winery" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    {success && (
+                        <div className="mb-4 rounded bg-emerald-500 px-4 py-2 text-white">
+                            {success}
+                        </div>
+                    )}
                     <div className="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             You're in winery
@@ -226,30 +245,20 @@ export default function Index({
                                                     <option value="">
                                                         Select a province
                                                     </option>
-                                                    <option value="Almeria">
-                                                        Almeria
-                                                    </option>
-                                                    <option value="Cádiz">
-                                                        Cádiz
-                                                    </option>
-                                                    <option value="Córdoba">
-                                                        Córdoba
-                                                    </option>
-                                                    <option value="Granada">
-                                                        Granada
-                                                    </option>
-                                                    <option value="Huelva">
-                                                        Huelva
-                                                    </option>
-                                                    <option value="Jaén">
-                                                        Jaén
-                                                    </option>
-                                                    <option value="Málaga">
-                                                        Málaga
-                                                    </option>
-                                                    <option value="Sevilla">
-                                                        Sevilla
-                                                    </option>
+                                                    {ANDALUSIA_PROVINCES.map(
+                                                        (province) => (
+                                                            <option
+                                                                key={
+                                                                    province.value
+                                                                }
+                                                                value={
+                                                                    province.value
+                                                                }
+                                                            >
+                                                                {province.name}
+                                                            </option>
+                                                        ),
+                                                    )}
                                                 </SelectInput>
                                             </th>
                                             <th className="px-3 py-3">

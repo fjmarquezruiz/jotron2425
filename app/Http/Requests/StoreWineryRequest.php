@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreWineryRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreWineryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +24,9 @@ class StoreWineryRequest extends FormRequest
     {
         return [
             //
+            "name" => ['required', 'max: 255'],
+            "city" => ['required', 'max: 255'],
+            "province" => Rule::in(['Almeria', 'Cádiz', 'Córdoba', 'Granada', 'Huelva', 'Jaén', 'Málaga', 'Sevilla'])
         ];
     }
 }

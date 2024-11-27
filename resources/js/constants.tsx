@@ -33,7 +33,43 @@ export const BLOCK_STATUS_CLASS_MAP = {
     0: 'bg-gray-600',
     1: 'bg-red-600',
 };
+
 export const BLOCK_STATUS_TEXT_MAP = {
     0: 'Active',
     1: 'Blocked',
 };
+
+export const ANDALUSIA_PROVINCES = [
+    {
+        name: 'Almería',
+        value: 'Almería',
+    },
+    {
+        name: 'Cádiz',
+        value: 'Cádiz',
+    },
+    {
+        name: 'Córdoba',
+        value: 'Córdoba',
+    },
+    {
+        name: 'Granada',
+        value: 'Granada',
+    },
+    {
+        name: 'Huelva',
+        value: 'Huelva',
+    },
+    {
+        name: 'Jaén',
+        value: 'Jaén',
+    },
+    {
+        name: 'Málaga',
+        value: 'Málaga',
+    },
+    {
+        name: 'Sevilla',
+        value: 'Sevilla',
+    },
+];
